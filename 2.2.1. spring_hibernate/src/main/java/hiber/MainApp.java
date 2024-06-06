@@ -9,6 +9,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class MainApp {
     public static void main(String[] args) throws SQLException {
@@ -48,14 +49,21 @@ public class MainApp {
             System.out.println("First Name = " + user.getFirstName());
             System.out.println("Last Name = " + user.getLastName());
             System.out.println("Email = " + user.getEmail());
+            user.getCar().getId();
             System.out.println("Car Id = " + user.getCar().getId());
             System.out.println("Car Model = " + user.getCar().getModel());
             System.out.println("Car Series = " + user.getCar().getSeries());
             System.out.println();
         }
 
-        System.out.println(userService.getUserByCar("Ria Kio", 112233));
-        System.out.println(userService.getUserByCar("Coyota Tamry", 223344).getFirstName());
+        Optional<User> wrongQuery = userService.getUserByCar("Ria Kio", 112233);
+        Optional<User> rightQuery = userService.getUserByCar("Coyota Tamry", 223344);
+        if (wrongQuery.isPresent()) {
+            System.out.println(wrongQuery.get().getFirstName());
+        }
+        if (rightQuery.isPresent()) {
+            System.out.println(rightQuery.get().getFirstName());
+        }
 
         context.close();
     }
